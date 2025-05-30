@@ -1,94 +1,37 @@
-# PDF Invoice Generator 📄💰
+# PDF Invoice Generator 📄
 
-> 🔥 **LAUNCH SPECIAL**: Looking for the FIRST $10 supporter! Be #1 and get your name here forever! → [**Support Now**](https://www.buymeacoffee.com/boxirgb)
-
-A simple yet powerful PDF invoice generator that helps freelancers and small businesses create professional invoices in seconds!
-
-## 🎯 The Problem & Solution
-
-**Without this tool**: Creating an invoice takes **55 minutes** and costs you **$45** in lost time.
-
-**With this tool**: Create an invoice in **30 seconds**. Save **$45** per invoice.
-
-**Your ROI**: This $10 tool pays for itself after creating just **ONE** invoice!
-
-## 🚀 Quick Start
-
-```javascript
-const invoice = new InvoiceGenerator();
-invoice.createInvoice({
-  from: "Your Company",
-  to: "Client Name",
-  items: [{description: "Web Development", price: 1000}]
-});
-```
-
-## ☕ Support This Project - Earn $10 Worth of Value!
-
-If this tool saves you time and helps your business, consider supporting the development:
-
-### 💵 **[Donate $10 via PayPal](https://paypal.me/boxirgb)** 
-### ☕ **[Buy me a coffee for $10](https://www.buymeacoffee.com/boxirgb)**
-### 💳 **[Support via Ko-fi for $10](https://ko-fi.com/boxirgb)**
-
-Your support helps me maintain this tool and create more useful open-source projects!
+A simple yet powerful invoice generator that creates professional invoices in seconds. Multi-language support, beautiful templates, and real PDF generation!
 
 ## ✨ Features
 
 - 📊 Professional invoice templates
 - 💰 Automatic tax calculations
-- 🌍 Multi-currency support
-- 📧 Email-ready PDF export
-- 🎨 Customizable design
-- 💾 Save and load templates
-- 🔒 Secure data handling
+- 🌍 Multi-language support (English, Japanese, Spanish)
+- 📧 Email-ready HTML output
+- 🎨 Beautiful, modern design
+- 💾 Export as HTML or JSON
+- 🔒 100% client-side - your data stays private
 - 📱 Mobile-responsive
 
-## 📦 Installation
-
-```bash
-npm install pdf-invoice-generator
-```
-
-Or use CDN:
-```html
-<script src="https://unpkg.com/pdf-invoice-generator/dist/invoice.min.js"></script>
-```
-
-## 💰 Why This Tool is Worth $10
-
-1. **Time Savings**: Create invoices in 30 seconds instead of 30 minutes
-2. **Professional Look**: Impress clients with polished invoices
-3. **Tax Compliance**: Automatic calculations reduce errors
-4. **Free Updates**: Lifetime updates with your support
-5. **Open Source**: Modify and customize as needed
-
-## 📖 Usage Example
+## 🚀 Quick Start
 
 ```javascript
-import InvoiceGenerator from 'pdf-invoice-generator';
-
 const invoice = new InvoiceGenerator();
 
 invoice.createInvoice({
   invoiceNumber: 'INV-001',
-  date: new Date(),
-  dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  
   from: {
     name: 'Your Company',
     address: '123 Business St',
     city: 'New York',
     country: 'USA'
   },
-  
   to: {
     name: 'Client Company',
     address: '456 Client Ave',
     city: 'Los Angeles',
     country: 'USA'
   },
-  
   items: [
     {
       description: 'Web Development',
@@ -101,56 +44,95 @@ invoice.createInvoice({
       price: 500
     }
   ],
-  
-  tax: 10, // 10%
-  currency: 'USD'
+  tax: 10 // 10% tax
 });
 
-// Save as PDF
+// Generate and save
 invoice.save('invoice.pdf');
 ```
 
-## 🎁 Special Offer
+## 🌐 Multi-Language Support
 
-**Limited Time**: Get lifetime Pro features for just $10!
+```javascript
+// Japanese invoice
+const invoice = new InvoiceGenerator({ language: 'ja' });
 
-### What You Get:
-- ✅ Unlimited invoice generation
-- ✅ 10+ premium templates
-- ✅ Custom branding/logo
-- ✅ Batch invoice creation
-- ✅ API access
-- ✅ Priority support
-- ✅ Future features
+// Spanish invoice
+const invoice = new InvoiceGenerator({ language: 'es' });
+```
 
-**[Claim Your Pro Access for $10](https://www.buymeacoffee.com/boxirgb)**
+## 📖 Usage
 
-## 📊 Quick Links
+### Basic Example
 
-- 📚 [Tutorial](TUTORIAL.md) - Learn how to use every feature
-- 🔍 [Comparison](COMPARISON.md) - See how we stack up against $50/month alternatives
-- 📢 [Promotion Kit](PROMOTION.md) - Help spread the word
-- 💸 [Success Stories](https://github.com/boxi-rgb/pdf-invoice-generator/issues/3) - Users saving $300+/month
+```javascript
+const invoice = new InvoiceGenerator();
+
+invoice
+  .createInvoice({
+    invoiceNumber: 'INV-2024-001',
+    date: new Date(),
+    dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+  })
+  .addItem({
+    description: 'Consulting Services',
+    quantity: 10,
+    price: 100
+  })
+  .addItem({
+    description: 'Travel Expenses',
+    quantity: 1,
+    price: 250
+  });
+
+// Preview in browser
+document.body.innerHTML = invoice.preview();
+
+// Save as PDF (opens print dialog)
+invoice.save();
+```
+
+### Export Options
+
+```javascript
+// Export as HTML
+const html = invoice.export('html');
+
+// Export as JSON
+const json = invoice.export('json');
+```
+
+## 🎨 Customization
+
+The generated invoices feature:
+- Modern gradient header
+- Clean, professional layout
+- Hover effects on table rows
+- Responsive design
+- Print-optimized styles
+
+## 💻 Browser Support
+
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
 
 ## 🤝 Contributing
 
-Pull requests are welcome! Please check out the contributing guidelines.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
 MIT License - feel free to use this in your commercial projects!
 
+## ☕ Support
+
+If this project helps you save time and create professional invoices, consider supporting its development:
+
+- [Buy me a coffee](https://www.buymeacoffee.com/boxirgb)
+- [Support on Ko-fi](https://ko-fi.com/boxirgb)
+
 ---
 
-**⚡ Ready to streamline your invoicing? Your $10 support keeps this project alive!**
-
-### 🙏 Recent Supporters
-- **Waiting for supporter #1!** - Be the first and get permanent recognition
-
-**Be the first supporter and get a shoutout here forever!**
-
-### 💭 Still thinking?
-
-Remember: Every day you wait costs you $45 per invoice. This tool costs just $10 total.
-
-**[Make the smart choice - Support for $10](https://www.buymeacoffee.com/boxirgb)**
+**Made with ❤️ by developers, for developers**

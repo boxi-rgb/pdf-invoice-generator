@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+        }
+        .demo-controls {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .preview-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .support-section {
+            background: #667eea;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .support-section h2 {
+            margin-bottom: 20px;
+        }
+        .support-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .support-button {
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        .support-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Invoice Generator Demo</h1>
+            <p class="subtitle">Create professional invoices in seconds!</p>
+        </div>
+
+        <div class="demo-controls">
+            <h2>Create Your Invoice</h2>
+            
+            <div class="form-group">
+                <label>Language:</label>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Invoice Number:</label>
+                <input type="text" id="invoiceNumber" value="INV-001" />
+            </div>
+
+            <div class="form-group">
+                <label>From (Your Company):</label>
+                <input type="text" id="fromName" placeholder="Company Name" value="Awesome Company Inc." />
+                <input type="text" id="fromAddress" placeholder="Address" value="123 Business St" style="margin-top: 5px;" />
+            </div>
+
+            <div class="form-group">
+                <label>To (Client):</label>
+                <input type="text" id="toName" placeholder="Client Name" value="Happy Client Ltd." />
+                <input type="text" id="toAddress" placeholder="Address" value="456 Client Ave" style="margin-top: 5px;" />
+            </div>
+
+            <div class="form-group">
+                <label>Items:</label>
+                <div id="items">
+                    <div>
+                        <input type="text" placeholder="Description" value="Web Development" style="width: 50%;" />
+                        <input type="number" placeholder="Quantity" value="1" style="width: 20%;" />
+                        <input type="number" placeholder="Price" value="1000" style="width: 25%;" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tax Rate (%):</label>
+                <input type="number" id="taxRate" value="10" />
+            </div>
+
+            <button onclick="generateInvoice()">Generate Invoice</button>
+            <button onclick="downloadPDF()">Download PDF</button>
+        </div>
+
+        <div class="preview-container" id="preview">
+            <p style="text-align: center; color: #999;">Invoice preview will appear here...</p>
+        </div>
+
+        <div class="support-section">
+            <h2>Support This Project</h2>
+            <p>If this tool helps you save time and create professional invoices, consider supporting the development!</p>
+            <div class="support-buttons">
+                <a href="https://www.buymeacoffee.com/boxirgb" class="support-button">☕ Buy me a coffee</a>
+                <a href="https://ko-fi.com/boxirgb" class="support-button">💝 Support on Ko-fi</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/invoice-generator.js"></script>
+    <script>
+        let currentInvoice = null;
+
+        function generateInvoice() {
+            const invoice = new InvoiceGenerator({
+                language: document.getElementById('language').value,
+                currency: 'USD'
+            });
+
+            invoice.createInvoice({
+                invoiceNumber: document.getElementById('invoiceNumber').value,
+                date: new Date(),
+                dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                from: {
+                    name: document.getElementById('fromName').value,
+                    address: document.getElementById('fromAddress').value,
+                    city: 'New York',
+                    country: 'USA'
+                },
+                to: {
+                    name: document.getElementById('toName').value,
+                    address: document.getElementById('toAddress').value,
+                    city: 'Los Angeles',
+                    country: 'USA'
+                },
+                items: [
+                    {
+                        description: 'Web Development',
+                        quantity: 1,
+                        price: 1000
+                    },
+                    {
+                        description: 'Design Services',
+                        quantity: 2,
+                        price: 500
+                    }
+                ],
+                tax: parseFloat(document.getElementById('taxRate').value),
+                notes: 'Thank you for your business! Payment is due within 30 days.'
+            });
+
+            currentInvoice = invoice;
+            document.getElementById('preview').innerHTML = invoice.preview();
+        }
+
+        function downloadPDF() {
+            if (!currentInvoice) {
+                alert('Please generate an invoice first!');
+                return;
+            }
+            currentInvoice.save('invoice.pdf');
+        }
+
+        // Generate initial invoice on load
+        window.onload = function() {
+            generateInvoice();
+        };
+    </script>
+</body>
+</html>
