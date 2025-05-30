@@ -1,10 +1,11 @@
 {
   "name": "pdf-invoice-generator",
-  "version": "1.0.0",
-  "description": "Simple and powerful PDF invoice generator - Create professional invoices in seconds!",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Professional PDF invoice generator with multi-language support - Create invoices in seconds!",
+  "main": "src/invoice-generator.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js",
+    "demo": "open demo/invoice-demo.html"
   },
   "keywords": [
     "invoice",
@@ -13,7 +14,9 @@
     "billing",
     "payment",
     "business",
-    "freelance"
+    "freelance",
+    "multi-language",
+    "i18n"
   ],
   "author": "boxi-rgb",
   "license": "MIT",
@@ -25,8 +28,10 @@
   "bugs": {
     "url": "https://github.com/boxi-rgb/pdf-invoice-generator/issues"
   },
-  "funding": {
-    "type": "individual",
-    "url": "https://www.buymeacoffee.com/boxirgb"
+  "features": {
+    "languages": ["en", "ja", "es"],
+    "export": ["html", "json", "pdf"],
+    "templates": ["default", "modern", "minimal"],
+    "customization": true
   }
 }
