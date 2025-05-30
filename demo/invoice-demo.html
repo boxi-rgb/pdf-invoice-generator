@@ -70,50 +70,21 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .support-section {
-            background: #667eea;
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 40px;
-        }
-        .support-section h2 {
-            margin-bottom: 20px;
-        }
-        .support-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .support-button {
-            background: white;
-            color: #667eea;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-        }
-        .support-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Invoice Generator Demo</h1>
-            <p class="subtitle">Create professional invoices in seconds!</p>
+            <h1 id="mainTitle">Invoice Generator Demo</h1>
+            <p class="subtitle" id="subtitle">Create professional invoices in seconds!</p>
         </div>
 
         <div class="demo-controls">
-            <h2>Create Your Invoice</h2>
+            <h2 id="createTitle">Create Your Invoice</h2>
             
             <div class="form-group">
-                <label>Language:</label>
-                <select id="language">
+                <label id="langLabel">Language:</label>
+                <select id="language" onchange="updateUI()">
                     <option value="en">English</option>
                     <option value="ja">日本語</option>
                     <option value="es">Español</option>
@@ -121,53 +92,44 @@
             </div>
 
             <div class="form-group">
-                <label>Invoice Number:</label>
+                <label id="invNumLabel">Invoice Number:</label>
                 <input type="text" id="invoiceNumber" value="INV-001" />
             </div>
 
             <div class="form-group">
-                <label>From (Your Company):</label>
+                <label id="fromLabel">From (Your Company):</label>
                 <input type="text" id="fromName" placeholder="Company Name" value="Awesome Company Inc." />
                 <input type="text" id="fromAddress" placeholder="Address" value="123 Business St" style="margin-top: 5px;" />
             </div>
 
             <div class="form-group">
-                <label>To (Client):</label>
+                <label id="toLabel">To (Client):</label>
                 <input type="text" id="toName" placeholder="Client Name" value="Happy Client Ltd." />
                 <input type="text" id="toAddress" placeholder="Address" value="456 Client Ave" style="margin-top: 5px;" />
             </div>
 
             <div class="form-group">
-                <label>Items:</label>
+                <label id="itemsLabel">Items:</label>
                 <div id="items">
                     <div>
-                        <input type="text" placeholder="Description" value="Web Development" style="width: 50%;" />
-                        <input type="number" placeholder="Quantity" value="1" style="width: 20%;" />
-                        <input type="number" placeholder="Price" value="1000" style="width: 25%;" />
+                        <input type="text" id="itemDesc" placeholder="Description" value="Web Development" style="width: 50%;" />
+                        <input type="number" id="itemQty" placeholder="Quantity" value="1" style="width: 20%;" />
+                        <input type="number" id="itemPrice" placeholder="Price" value="1000" style="width: 25%;" />
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Tax Rate (%):</label>
+                <label id="taxLabel">Tax Rate (%):</label>
                 <input type="number" id="taxRate" value="10" />
             </div>
 
-            <button onclick="generateInvoice()">Generate Invoice</button>
-            <button onclick="downloadPDF()">Download PDF</button>
+            <button id="generateBtn" onclick="generateInvoice()">Generate Invoice</button>
+            <button id="downloadBtn" onclick="downloadPDF()">Download PDF</button>
         </div>
 
         <div class="preview-container" id="preview">
-            <p style="text-align: center; color: #999;">Invoice preview will appear here...</p>
-        </div>
-
-        <div class="support-section">
-            <h2>Support This Project</h2>
-            <p>If this tool helps you save time and create professional invoices, consider supporting the development!</p>
-            <div class="support-buttons">
-                <a href="https://www.buymeacoffee.com/boxirgb" class="support-button">☕ Buy me a coffee</a>
-                <a href="https://ko-fi.com/boxirgb" class="support-button">💝 Support on Ko-fi</a>
-            </div>
+            <p style="text-align: center; color: #999;" id="previewText">Invoice preview will appear here...</p>
         </div>
     </div>
 
@@ -175,10 +137,124 @@
     <script>
         let currentInvoice = null;
 
+        // UI翻訳
+        const uiTranslations = {
+            en: {
+                mainTitle: 'Invoice Generator Demo',
+                subtitle: 'Create professional invoices in seconds!',
+                createTitle: 'Create Your Invoice',
+                langLabel: 'Language:',
+                invNumLabel: 'Invoice Number:',
+                fromLabel: 'From (Your Company):',
+                toLabel: 'To (Client):',
+                itemsLabel: 'Items:',
+                taxLabel: 'Tax Rate (%):',
+                generateBtn: 'Generate Invoice',
+                downloadBtn: 'Download PDF',
+                previewText: 'Invoice preview will appear here...',
+                itemDescPlaceholder: 'Description',
+                itemQtyPlaceholder: 'Quantity',
+                itemPricePlaceholder: 'Price',
+                fromNamePlaceholder: 'Company Name',
+                fromAddressPlaceholder: 'Address',
+                toNamePlaceholder: 'Client Name',
+                toAddressPlaceholder: 'Address'
+            },
+            ja: {
+                mainTitle: '請求書ジェネレーター デモ',
+                subtitle: 'プロフェッショナルな請求書を数秒で作成！',
+                createTitle: '請求書を作成',
+                langLabel: '言語:',
+                invNumLabel: '請求書番号:',
+                fromLabel: '請求元（御社）:',
+                toLabel: '請求先（顧客）:',
+                itemsLabel: '項目:',
+                taxLabel: '税率 (%):',
+                generateBtn: '請求書生成',
+                downloadBtn: 'PDFダウンロード',
+                previewText: '請求書プレビューがここに表示されます...',
+                itemDescPlaceholder: '内容',
+                itemQtyPlaceholder: '数量',
+                itemPricePlaceholder: '単価',
+                fromNamePlaceholder: '会社名',
+                fromAddressPlaceholder: '住所',
+                toNamePlaceholder: '顧客名',
+                toAddressPlaceholder: '住所'
+            },
+            es: {
+                mainTitle: 'Demostración del Generador de Facturas',
+                subtitle: '¡Crea facturas profesionales en segundos!',
+                createTitle: 'Crear Su Factura',
+                langLabel: 'Idioma:',
+                invNumLabel: 'Número de Factura:',
+                fromLabel: 'De (Su Empresa):',
+                toLabel: 'Para (Cliente):',
+                itemsLabel: 'Artículos:',
+                taxLabel: 'Tasa de Impuesto (%):',
+                generateBtn: 'Generar Factura',
+                downloadBtn: 'Descargar PDF',
+                previewText: 'La vista previa de la factura aparecerá aquí...',
+                itemDescPlaceholder: 'Descripción',
+                itemQtyPlaceholder: 'Cantidad',
+                itemPricePlaceholder: 'Precio',
+                fromNamePlaceholder: 'Nombre de la Empresa',
+                fromAddressPlaceholder: 'Dirección',
+                toNamePlaceholder: 'Nombre del Cliente',
+                toAddressPlaceholder: 'Dirección'
+            }
+        };
+
+        function updateUI() {
+            const lang = document.getElementById('language').value;
+            const translations = uiTranslations[lang];
+
+            // テキスト更新
+            document.getElementById('mainTitle').textContent = translations.mainTitle;
+            document.getElementById('subtitle').textContent = translations.subtitle;
+            document.getElementById('createTitle').textContent = translations.createTitle;
+            document.getElementById('langLabel').textContent = translations.langLabel;
+            document.getElementById('invNumLabel').textContent = translations.invNumLabel;
+            document.getElementById('fromLabel').textContent = translations.fromLabel;
+            document.getElementById('toLabel').textContent = translations.toLabel;
+            document.getElementById('itemsLabel').textContent = translations.itemsLabel;
+            document.getElementById('taxLabel').textContent = translations.taxLabel;
+            document.getElementById('generateBtn').textContent = translations.generateBtn;
+            document.getElementById('downloadBtn').textContent = translations.downloadBtn;
+            document.getElementById('previewText').textContent = translations.previewText;
+
+            // プレースホルダー更新
+            document.getElementById('itemDesc').placeholder = translations.itemDescPlaceholder;
+            document.getElementById('itemQty').placeholder = translations.itemQtyPlaceholder;
+            document.getElementById('itemPrice').placeholder = translations.itemPricePlaceholder;
+            document.getElementById('fromName').placeholder = translations.fromNamePlaceholder;
+            document.getElementById('fromAddress').placeholder = translations.fromAddressPlaceholder;
+            document.getElementById('toName').placeholder = translations.toNamePlaceholder;
+            document.getElementById('toAddress').placeholder = translations.toAddressPlaceholder;
+
+            // 通貨変更
+            const currencyMap = {
+                'en': 'USD',
+                'ja': 'JPY',
+                'es': 'EUR'
+            };
+
+            // 請求書を自動再生成
+            if (currentInvoice) {
+                generateInvoice();
+            }
+        }
+
         function generateInvoice() {
+            const lang = document.getElementById('language').value;
+            const currencyMap = {
+                'en': 'USD',
+                'ja': 'JPY',
+                'es': 'EUR'
+            };
+
             const invoice = new InvoiceGenerator({
-                language: document.getElementById('language').value,
-                currency: 'USD'
+                language: lang,
+                currency: currencyMap[lang]
             });
 
             invoice.createInvoice({
@@ -188,29 +264,26 @@
                 from: {
                     name: document.getElementById('fromName').value,
                     address: document.getElementById('fromAddress').value,
-                    city: 'New York',
-                    country: 'USA'
+                    city: lang === 'ja' ? '東京' : lang === 'es' ? 'Madrid' : 'New York',
+                    country: lang === 'ja' ? '日本' : lang === 'es' ? 'España' : 'USA'
                 },
                 to: {
                     name: document.getElementById('toName').value,
                     address: document.getElementById('toAddress').value,
-                    city: 'Los Angeles',
-                    country: 'USA'
+                    city: lang === 'ja' ? '大阪' : lang === 'es' ? 'Barcelona' : 'Los Angeles',
+                    country: lang === 'ja' ? '日本' : lang === 'es' ? 'España' : 'USA'
                 },
                 items: [
                     {
-                        description: 'Web Development',
-                        quantity: 1,
-                        price: 1000
-                    },
-                    {
-                        description: 'Design Services',
-                        quantity: 2,
-                        price: 500
+                        description: document.getElementById('itemDesc').value,
+                        quantity: parseInt(document.getElementById('itemQty').value),
+                        price: parseFloat(document.getElementById('itemPrice').value)
                     }
                 ],
                 tax: parseFloat(document.getElementById('taxRate').value),
-                notes: 'Thank you for your business! Payment is due within 30 days.'
+                notes: lang === 'ja' ? 'お支払いは30日以内にお願いいたします。' : 
+                       lang === 'es' ? 'El pago debe realizarse dentro de 30 días.' :
+                       'Payment is due within 30 days.'
             });
 
             currentInvoice = invoice;
@@ -219,14 +292,21 @@
 
         function downloadPDF() {
             if (!currentInvoice) {
-                alert('Please generate an invoice first!');
+                const lang = document.getElementById('language').value;
+                const alertMsg = {
+                    'ja': '先に請求書を生成してください！',
+                    'es': '¡Por favor, genere una factura primero!',
+                    'en': 'Please generate an invoice first!'
+                };
+                alert(alertMsg[lang]);
                 return;
             }
             currentInvoice.save('invoice.pdf');
         }
 
-        // Generate initial invoice on load
+        // 初期化
         window.onload = function() {
+            updateUI();
             generateInvoice();
         };
     </script>
